@@ -8,5 +8,4 @@ Developed with the following patterns and principles:
 - C#
 
 ## External Nuget Packages
-- Newtonsoft.Json
 - Mehedi.Core.SharedKernel

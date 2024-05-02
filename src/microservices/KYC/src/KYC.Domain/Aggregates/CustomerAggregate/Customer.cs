@@ -40,7 +40,7 @@ public class Customer(string firstName, string lastName, DateTime dob) : BaseEnt
     public void Update()
     {
         // TODO: other business
-        AddDomainEvent(new CustomerCreatedDomainEvent(Id, FirstName, LastName, Dob));
+        AddDomainEvent(new CustomerUpdatedDomainEvent(Id, FirstName, LastName, Dob));
     }
     /// <summary>
     /// Deletes the customer.
