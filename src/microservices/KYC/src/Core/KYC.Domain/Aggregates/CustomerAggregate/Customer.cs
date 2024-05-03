@@ -1,4 +1,5 @@
 ﻿using KYC.Domain.Aggregates.CustomerAggregate.Events;
+using KYC.Domain.ValueObjects;
 using Mehedi.Core.SharedKernel;
 
 namespace KYC.Domain.Aggregates.CustomerAggregate;
@@ -6,7 +7,8 @@ namespace KYC.Domain.Aggregates.CustomerAggregate;
 /// <summary>
 /// Customer Aggregate
 /// </summary>
-public class Customer(string firstName, string lastName, DateTime dob) : BaseEntity, IAggregateRoot
+public class Customer(string firstName, string lastName, DateTime dob, Address address) 
+    : BaseEntity, IAggregateRoot
 {
 
     #region Properties
@@ -23,6 +25,10 @@ public class Customer(string firstName, string lastName, DateTime dob) : BaseEnt
     /// Gets the date of birth of the customer.
     /// </summary>
     public DateTime Dob { get; private set; } = dob;
+    /// <summary>
+    /// Get the address (ValueObject) of a customer
+    /// </summary>
+    public Address Address { get; private set; } = address;
     #endregion
 
     #region Domain Event(s)
@@ -32,7 +38,7 @@ public class Customer(string firstName, string lastName, DateTime dob) : BaseEnt
     public void Create()
     {
         // TODO: other business
-        AddDomainEvent(new CustomerCreatedDomainEvent(Id, FirstName, LastName, Dob));
+        AddDomainEvent(new CustomerCreatedDomainEvent(Id, FirstName, LastName, Dob, Address));
     }
     /// <summary>
     /// Update existing customer
@@ -40,7 +46,7 @@ public class Customer(string firstName, string lastName, DateTime dob) : BaseEnt
     public void Update()
     {
         // TODO: other business
-        AddDomainEvent(new CustomerUpdatedDomainEvent(Id, FirstName, LastName, Dob));
+        AddDomainEvent(new CustomerUpdatedDomainEvent(Id, FirstName, LastName, Dob, Address));
     }
     /// <summary>
     /// Deletes the customer.
@@ -48,7 +54,7 @@ public class Customer(string firstName, string lastName, DateTime dob) : BaseEnt
     public void Delete()
     {
         // TODO: Other business
-        AddDomainEvent(new CustomerDeletedDomainEvent(Id, FirstName, LastName, Dob));
+        AddDomainEvent(new CustomerDeletedDomainEvent(Id, FirstName, LastName, Dob, Address));
     }
     #endregion
 }

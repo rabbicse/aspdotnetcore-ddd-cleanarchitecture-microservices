@@ -24,7 +24,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\KYC.Application\KYC.Application.csproj" />
-    <ProjectReference Include="..\KYC.Domain\KYC.Domain.csproj" />
     <ProjectReference Include="..\KYC.EventStoreDB.Infrastructure\KYC.EventStoreDB.Infrastructure.csproj" />
     <ProjectReference Include="..\KYC.Read.Infrastructure\KYC.Read.Infrastructure.csproj" />
     <ProjectReference Include="..\KYC.RedisCache.Infrastructure\KYC.RedisCache.Infrastructure.csproj" />

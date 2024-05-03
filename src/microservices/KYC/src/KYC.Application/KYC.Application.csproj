@@ -14,7 +14,6 @@
     <ProjectReference Include="..\..\..\Shared\Mehedi.Application.SharedKernel\Mehedi.Application.SharedKernel.csproj" />
     <ProjectReference Include="..\..\..\Shared\Mehedi.EventBus\Mehedi.EventBus.csproj" />
     <ProjectReference Include="..\..\..\Shared\Mehedi.SharedKernel\Mehedi.Core.SharedKernel.csproj" />
-    <ProjectReference Include="..\KYC.Domain\KYC.Domain.csproj" />
   </ItemGroup>
 
 </Project>
