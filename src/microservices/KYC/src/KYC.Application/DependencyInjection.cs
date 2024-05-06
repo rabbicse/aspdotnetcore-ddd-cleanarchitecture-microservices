@@ -12,7 +12,7 @@ public static class DependencyInjection
     /// Adds command handlers to the service collection.
     /// </summary>
     /// <param name="services">The service collection.</param>
-    public static IServiceCollection AddCommandHandlers(this IServiceCollection services)
+    public static IServiceCollection AddApplications(this IServiceCollection services)
     {
         var assembly = Assembly.GetExecutingAssembly();
         return services

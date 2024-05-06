@@ -28,7 +28,7 @@ builder.Services.AddReadOnlyRepositories();
 builder.Services.AddWriteInfrastructureServices(builder.Configuration);
 builder.Services.AddEventStoreInfrastructureServices(builder.Configuration);
 builder.Services.AddCacheInfrastructureServices(builder.Configuration);
-builder.Services.AddCommandHandlers();
+builder.Services.AddApplications();
 // Add dependencies from Infra layer
 
 var app = builder.Build();
