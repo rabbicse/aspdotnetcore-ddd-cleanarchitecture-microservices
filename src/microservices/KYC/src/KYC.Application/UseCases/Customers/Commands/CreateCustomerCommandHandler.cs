@@ -1,22 +1,23 @@
 ﻿using KYC.Application.UseCases.Customers.DTOs;
-using KYC.Application.UseCases.Customers.Events;
 using KYC.Application.UseCases.Customers.Repositories;
+using KYC.Domain.Aggregates.CustomerAggregate;
+using KYC.Domain.ValueObjects;
 using MediatR;
 using Mehedi.Application.SharedKernel.Responses;
 using Mehedi.Core.SharedKernel;
-using Mehedi.EventBus;
 
 namespace KYC.Application.UseCases.Customers.Commands
 {
     public class CreateCustomerCommandHandler(
         //IValidator<CreateCustomerCommand> validator,
         ICustomerCommandRepository repository,
-        IUnitOfWork unitOfWork,
-        IEventProducer eventProducer) : IRequestHandler<CreateCustomerCommand, Result<CreatedCustomerResponse>>
+        IUnitOfWork unitOfWork
+        //IEventProducer eventProducer
+        ) : IRequestHandler<CreateCustomerCommand, Result<CreatedCustomerResponse>>
     {
         private readonly ICustomerCommandRepository _repository = repository;
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
-        private readonly IEventProducer _eventProducer = eventProducer;
+        //private readonly IEventProducer _eventProducer = eventProducer;
         //private readonly IValidator<CreateCustomerCommand> _validator = validator;
 
         public async Task<Result<CreatedCustomerResponse>> Handle(
@@ -41,7 +42,16 @@ namespace KYC.Application.UseCases.Customers.Commands
 
             // Creating an instance of the customer entity.
             // When instantiated, the "CustomerCreatedEvent" will be created.
-            var customer = new Domain.Aggregates.CustomerAggregate.Customer(request.FirstName, request.LastName, request.Dob);
+            var address = new Address(
+                street: "New Airport Road",
+                city: "Dhaka",
+                state: "Dhaka",
+                country: "Bangladesh",
+                zipcode: "1205");
+            var customer = new Customer(request.FirstName,
+                request.LastName,
+                request.Dob,
+                address);
             customer.Create();
 
             // Adding the entity to the repository.
@@ -50,12 +60,12 @@ namespace KYC.Application.UseCases.Customers.Commands
             // Saving changes to the database and triggering domain events.
             var success = await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-            // If persistence success and domain events processed successfully then publish events
-            if (success) 
-            {
-                var @event = new CustomerCreatedEvent(Guid.NewGuid(), customer.Id);
-                await _eventProducer.PublishAsync(@event);
-            }
+            //// If persistence success and domain events processed successfully then publish events
+            //if (success) 
+            //{
+            //    var @event = new CustomerCreatedEvent(Guid.NewGuid(), customer.Id);
+            //    await _eventProducer.PublishAsync(@event);
+            //}
 
             // Returning the ID and success message.
             return Result<CreatedCustomerResponse>.Success(

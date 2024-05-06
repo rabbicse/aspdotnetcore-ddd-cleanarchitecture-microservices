@@ -1,4 +1,4 @@
-﻿using Mehedi.Application.SharedKernel.Interfaces;
+﻿using Mehedi.Application.SharedKernel.Responses;
 
 namespace KYC.Application.UseCases.Customers.DTOs;
 

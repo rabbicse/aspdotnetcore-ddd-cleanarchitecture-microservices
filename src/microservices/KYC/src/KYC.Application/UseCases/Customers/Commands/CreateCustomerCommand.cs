@@ -1,4 +1,5 @@
 ﻿using KYC.Application.UseCases.Customers.DTOs;
+using KYC.Domain.ValueObjects;
 using MediatR;
 using Mehedi.Application.SharedKernel.Responses;
 using System.ComponentModel.DataAnnotations;
@@ -20,4 +21,5 @@ public class CreateCustomerCommand : IRequest<Result<CreatedCustomerResponse>>
     [Required]
     [DataType(DataType.Date)]
     public DateTime Dob { get; set; }
+    public Address? CustomerAddress { get; set; }
 }
