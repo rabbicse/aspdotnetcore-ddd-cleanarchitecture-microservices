@@ -12,11 +12,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Core\KYC.Domain\KYC.Domain.csproj" />
+    <Folder Include="UseCases\Customers\Events\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="UseCases\Customers\Events\" />
+    <ProjectReference Include="..\..\Core\KYC.Domain\KYC.Domain.csproj" />
   </ItemGroup>
 
 </Project>
