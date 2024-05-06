@@ -18,11 +18,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Shared\Mehedi.Application.SharedKernel\Mehedi.Application.SharedKernel.csproj" />
     <ProjectReference Include="..\..\..\Shared\Mehedi.EventBus.Kafka\Mehedi.EventBus.Kafka.csproj" />
     <ProjectReference Include="..\..\..\Shared\Mehedi.EventBus\Mehedi.EventBus.csproj" />
     <ProjectReference Include="..\..\..\Shared\Mehedi.Write.Infrastructure.SharedKernel\Mehedi.Write.Infrastructure.SharedKernel.csproj" />
-    <ProjectReference Include="..\KYC.Application\KYC.Application.csproj" />
+    <ProjectReference Include="..\..\Application\KYC.Application\KYC.Application.csproj" />
   </ItemGroup>
 
 </Project>

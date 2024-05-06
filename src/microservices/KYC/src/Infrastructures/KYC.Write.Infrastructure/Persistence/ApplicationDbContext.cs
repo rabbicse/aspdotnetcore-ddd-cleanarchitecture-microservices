@@ -2,7 +2,6 @@
 using Mehedi.Application.SharedKernel.Persistence;
 using Mehedi.Core.SharedKernel;
 using Microsoft.EntityFrameworkCore;
-using System.Net;
 using System.Reflection;
 
 namespace KYC.Write.Infrastructure.Persistence;

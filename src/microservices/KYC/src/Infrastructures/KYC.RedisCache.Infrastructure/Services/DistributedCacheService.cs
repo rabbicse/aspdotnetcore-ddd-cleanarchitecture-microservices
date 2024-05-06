@@ -33,7 +33,7 @@ internal class DistributedCacheService : ICacheService
         var valueBytes = await _distributedCache.GetAsync(cacheKey);
         if (valueBytes?.Length > 0)
         {
-            _logger.LogInformation("----- Fetched from {CacheServiceName}: '{CacheKey}'", CacheServiceName, cacheKey);
+            _logger.LogInformation("Fetched from {CacheServiceName}: '{CacheKey}'", CacheServiceName, cacheKey);
 
             var value = Encoding.UTF8.GetString(valueBytes);
             return value.FromJson<TItem>();
@@ -42,7 +42,7 @@ internal class DistributedCacheService : ICacheService
         var item = await factory();
         if (item != null)
         {
-            _logger.LogInformation("----- Added to {CacheServiceName}: '{CacheKey}'", CacheServiceName, cacheKey);
+            _logger.LogInformation("Added to {CacheServiceName}: '{CacheKey}'", CacheServiceName, cacheKey);
 
             var value = Encoding.UTF8.GetBytes(item.ToJson());
             await _distributedCache.SetAsync(cacheKey, value, _cacheOptions);
