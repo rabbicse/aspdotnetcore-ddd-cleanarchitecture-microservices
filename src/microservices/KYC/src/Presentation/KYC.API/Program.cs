@@ -1,9 +1,7 @@
 using Microsoft.AspNetCore.ResponseCompression;
 using KYC.Application;
-using KYC.Write.Infrastructure;
-using KYC.Read.Infrastructure;
+using KYC.Write.MsSql.Infrastructure;
 using KYC.EventStoreDB.Infrastructure;
-using KYC.RedisCache.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,14 +20,15 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Add dependencies from Application layer
-builder.Services.AddQueryHandlers();
-builder.Services.AddReadDbContext();
-builder.Services.AddReadOnlyRepositories();
+//builder.Services.AddQueryHandlers();
+//builder.Services.AddReadDbContext();
+//builder.Services.AddReadOnlyRepositories();
+builder.Services.AddApplications();
+
+// Add dependencies from Infra layer
 builder.Services.AddWriteInfrastructureServices(builder.Configuration);
 builder.Services.AddEventStoreInfrastructureServices(builder.Configuration);
-builder.Services.AddCacheInfrastructureServices(builder.Configuration);
-builder.Services.AddApplications();
-// Add dependencies from Infra layer
+//builder.Services.AddCacheInfrastructureServices(builder.Configuration);
 
 var app = builder.Build();
 

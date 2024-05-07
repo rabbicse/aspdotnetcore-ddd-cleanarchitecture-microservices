@@ -1,8 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Net.Mime;
 using KYC.Application.UseCases.Customers.Commands;
-using KYC.Application.UseCases.Customers.DTOs;
-using KYC.Application.UseCases.Customers.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -107,15 +105,15 @@ public class CustomersController(IMediator mediator) : ControllerBase
     ///// </summary>
     ///// <response code="200">Returns the list of clients.</response>
     ///// <response code="500">When an unexpected internal error occurs on the server.</response>
-    [HttpGet]
+    //[HttpGet]
     //[Consumes(MediaTypeNames.Application.Json)]
     //[Produces(MediaTypeNames.Application.Json)]
     //[ProducesResponseType(typeof(ApiResponse<IEnumerable<CustomerQueryModel>>), StatusCodes.Status200OK)]
     //[ProducesResponseType(typeof(ApiResponse), StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> GetAll()
-    {
-        var result = await _mediator.Send(new GetAllCustomerQuery());
+    //public async Task<IActionResult> GetAll()
+    //{
+    //    var result = await _mediator.Send(new GetAllCustomerQuery());
 
-        return Ok(result);
-    }
+    //    return Ok(result);
+    //}
 }

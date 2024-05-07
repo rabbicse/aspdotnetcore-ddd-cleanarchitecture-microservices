@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Shared\Mehedi.Application.SharedKernel\Mehedi.Application.SharedKernel.csproj" />
+    <ProjectReference Include="..\..\Application\KYC.Application\KYC.Application.csproj" />
   </ItemGroup>
 
 </Project>

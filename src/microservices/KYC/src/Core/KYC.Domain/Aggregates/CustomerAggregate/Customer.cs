@@ -7,28 +7,37 @@ namespace KYC.Domain.Aggregates.CustomerAggregate;
 /// <summary>
 /// Customer Aggregate
 /// </summary>
-public class Customer(string firstName, string lastName, DateTime dob, Address address) 
+public class Customer 
     : BaseEntity, IAggregateRoot
 {
+    public Customer() { }
+
+    public Customer(string firstName, string lastName, DateTime dob, Address address) 
+    {
+        FirstName = firstName;
+        LastName = lastName;
+        Dob = dob;
+        Address = address;
+    }
 
     #region Properties
     /// <summary>
     /// Gets the first name of the customer.
     /// </summary>
-    public string FirstName { get; private set; } = firstName;
+    public string FirstName { get; private set; }
 
     /// <summary>
     /// Gets the last name of the customer.
     /// </summary>
-    public string LastName { get; private set; } = lastName;
+    public string LastName { get; private set; }
     /// <summary>
     /// Gets the date of birth of the customer.
     /// </summary>
-    public DateTime Dob { get; private set; } = dob;
+    public DateTime Dob { get; private set; }
     /// <summary>
     /// Get the address (ValueObject) of a customer
     /// </summary>
-    public Address Address { get; private set; } = address;
+    public Address Address { get; private set; }
     #endregion
 
     #region Domain Event(s)

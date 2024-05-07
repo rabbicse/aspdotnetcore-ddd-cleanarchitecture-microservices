@@ -11,17 +11,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.3" />
+    <PackageReference Include="Mehedi.Write.RDBMS.Infrastructure.Abstractions" Version="1.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.4" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Shared\Mehedi.EventBus.Kafka\Mehedi.EventBus.Kafka.csproj" />
-    <ProjectReference Include="..\..\..\Shared\Mehedi.EventBus\Mehedi.EventBus.csproj" />
-    <ProjectReference Include="..\..\..\Shared\Mehedi.Write.Infrastructure.SharedKernel\Mehedi.Write.Infrastructure.SharedKernel.csproj" />
     <ProjectReference Include="..\..\Application\KYC.Application\KYC.Application.csproj" />
+    <ProjectReference Include="..\..\Core\KYC.Domain\KYC.Domain.csproj" />
   </ItemGroup>
 
 </Project>
