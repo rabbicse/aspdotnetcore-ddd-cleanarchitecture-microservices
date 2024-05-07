@@ -21,3 +21,6 @@ Develop microservices in ASP.NET Core and C# with the following patterns and pri
 
 ## References
 - [CQRS](https://martinfowler.com/bliki/CQRS.html)
+- [eShop](https://github.com/dotnet/eShop)
+- [CodeOpinion](https://www.youtube.com/@CodeOpinion)
+- [MilanJovanovicTech](https://www.youtube.com/@MilanJovanovicTech)
