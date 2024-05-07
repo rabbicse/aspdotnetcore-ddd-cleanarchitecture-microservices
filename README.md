@@ -2,7 +2,7 @@
 Develop microservices in ASP.NET Core and C# with the following patterns and principles
 - Domain Driven Design (DDD)
 - Clean Architecture
-- Command Query Responsibility Segregation (CRQS)
+- Command Query Responsibility Segregation (CQRS)
 - Event Sourcing
 - Event Driven Architecture
 - REST Api
