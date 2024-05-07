@@ -23,13 +23,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KYC.Application", "src\Appl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KYC.API", "src\Presentation\KYC.API\KYC.API.csproj", "{5928198C-8D61-45E4-834D-0F4EB03B03F6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KYC.Write.MsSql.Infrastructure", "src\Infrastructures\KYC.Write.Infrastructure\KYC.Write.MsSql.Infrastructure.csproj", "{DA9785A1-37EE-498A-8F8A-EDD201578E65}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KYC.Read.Infrastructure", "src\Infrastructures\KYC.Read.Infrastructure\KYC.Read.Infrastructure.csproj", "{AC0B1827-2763-4A42-B215-327B34C0E9A6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KYC.EventStoreDB.Infrastructure", "src\Infrastructures\KYC.EventStoreDB.Infrastructure\KYC.EventStoreDB.Infrastructure.csproj", "{6B0C8451-4B5C-49DF-8624-388D99474A05}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KYC.RedisCache.Infrastructure", "src\Infrastructures\KYC.RedisCache.Infrastructure\KYC.RedisCache.Infrastructure.csproj", "{ADAE4C01-E170-49DC-B558-402FBC83D4DE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KYC.Write.MsSql.Infrastructure", "src\Infrastructures\KYC.Write.MsSql.Infrastructure\KYC.Write.MsSql.Infrastructure.csproj", "{FB5E08B2-EF86-49A0-A3EA-CF3C834EB9F7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,10 +53,6 @@ Global
 		{5928198C-8D61-45E4-834D-0F4EB03B03F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5928198C-8D61-45E4-834D-0F4EB03B03F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5928198C-8D61-45E4-834D-0F4EB03B03F6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DA9785A1-37EE-498A-8F8A-EDD201578E65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DA9785A1-37EE-498A-8F8A-EDD201578E65}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DA9785A1-37EE-498A-8F8A-EDD201578E65}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DA9785A1-37EE-498A-8F8A-EDD201578E65}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AC0B1827-2763-4A42-B215-327B34C0E9A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AC0B1827-2763-4A42-B215-327B34C0E9A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AC0B1827-2763-4A42-B215-327B34C0E9A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -69,6 +65,10 @@ Global
 		{ADAE4C01-E170-49DC-B558-402FBC83D4DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ADAE4C01-E170-49DC-B558-402FBC83D4DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ADAE4C01-E170-49DC-B558-402FBC83D4DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB5E08B2-EF86-49A0-A3EA-CF3C834EB9F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB5E08B2-EF86-49A0-A3EA-CF3C834EB9F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB5E08B2-EF86-49A0-A3EA-CF3C834EB9F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB5E08B2-EF86-49A0-A3EA-CF3C834EB9F7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -82,10 +82,10 @@ Global
 		{26BC977A-71D1-402B-8FF8-E8CED460C446} = {302DADD9-E82A-486A-A0F1-0B5E11EBD0A4}
 		{AC379A7C-42CD-4FDF-96B4-898D28A16508} = {E32F066D-96E9-482D-BD8B-D09467D72571}
 		{5928198C-8D61-45E4-834D-0F4EB03B03F6} = {77B8918E-7090-40E1-8563-669BE1AF3E81}
-		{DA9785A1-37EE-498A-8F8A-EDD201578E65} = {6EA7E701-DA85-4535-93F6-6A86E4E9AD1B}
 		{AC0B1827-2763-4A42-B215-327B34C0E9A6} = {6EA7E701-DA85-4535-93F6-6A86E4E9AD1B}
 		{6B0C8451-4B5C-49DF-8624-388D99474A05} = {6EA7E701-DA85-4535-93F6-6A86E4E9AD1B}
 		{ADAE4C01-E170-49DC-B558-402FBC83D4DE} = {6EA7E701-DA85-4535-93F6-6A86E4E9AD1B}
+		{FB5E08B2-EF86-49A0-A3EA-CF3C834EB9F7} = {6EA7E701-DA85-4535-93F6-6A86E4E9AD1B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {690089AB-591A-46BB-AF5E-7881E2225881}
