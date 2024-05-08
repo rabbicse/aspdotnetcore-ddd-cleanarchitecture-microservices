@@ -3,12 +3,17 @@ using Mehedi.Application.SharedKernel.Services;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
 
-namespace KYC.EventStoreDB.Infrastructure.Repositories;
+namespace KYC.EventStore.EventStoreDB.Infrastructure.Repositories;
 
 public sealed class EventStoreRepository(EventStoreClient eventStoreClient, ILogger<EventStoreRepository> logger) : IEventStoreRepository
 {
     private readonly EventStoreClient _eventStoreClient = eventStoreClient;
     private readonly ILogger<EventStoreRepository> _logger = logger;
+    /// <summary>
+    /// Append events asynchronously
+    /// </summary>
+    /// <param name="eventStores"></param>
+    /// <returns></returns>
     public async Task StoreAsync(IEnumerable<EventStoreEvent> eventStores)
     {
         if (eventStores == null)
@@ -20,7 +25,10 @@ public sealed class EventStoreRepository(EventStoreClient eventStoreClient, ILog
         var result = await _eventStoreClient.AppendToStreamAsync(
             eventStores.First().Id.ToString(),
             StreamState.Any,
-            eventStores.Select(ev => new EventData(Uuid.NewUuid(), "Test Event", JsonSerializer.SerializeToUtf8Bytes(ev))));
+            eventStores.Select(ev => new EventData(
+                Uuid.NewUuid(), 
+                "Test Event", 
+                JsonSerializer.SerializeToUtf8Bytes(ev))));
 
         _logger.LogInformation($"Event Store result: {result.NextExpectedStreamRevision}");
     }

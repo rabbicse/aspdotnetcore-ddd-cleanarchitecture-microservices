@@ -1,10 +1,10 @@
 ﻿using EventStore.Client;
-using KYC.EventStoreDB.Infrastructure.Repositories;
+using KYC.EventStore.EventStoreDB.Infrastructure.Repositories;
 using Mehedi.Application.SharedKernel.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace KYC.EventStoreDB.Infrastructure;
+namespace KYC.EventStore.EventStoreDB.Infrastructure;
 
 public class EventStoreDBConfig
 {
