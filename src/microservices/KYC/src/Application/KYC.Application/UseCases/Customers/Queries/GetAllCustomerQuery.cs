@@ -4,4 +4,4 @@ using Mehedi.Application.SharedKernel.Responses;
 
 namespace KYC.Application.UseCases.Customers.Queries;
 
-//public class GetAllCustomerQuery : IRequest<Result<IEnumerable<CustomerQueryModel>>>;
+public class GetAllCustomerQuery : IRequest<Result<IEnumerable<CustomerQueryModel>>>;

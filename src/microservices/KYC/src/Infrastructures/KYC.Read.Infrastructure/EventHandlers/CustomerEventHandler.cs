@@ -5,21 +5,21 @@ using KYC.Domain.Aggregates.CustomerAggregate.Events;
 using MediatR;
 using Mehedi.Application.SharedKernel.Extensions;
 using Mehedi.Application.SharedKernel.Services;
-using Mehedi.Read.Infrastructure.SharedKernel.Interfaces;
+using Mehedi.Read.NoSql.Infrastructure.Abstractions;
 using Microsoft.Extensions.Logging;
 
-namespace KYC.Read.Infrastructure.EventHandlers;
+namespace KYC.Read.Mongo.Infrastructure.EventHandlers;
 
 public class CustomerEventHandler(
     IMapper mapper,
     ISynchronizeDb synchronizeDb,
-    ICacheService cacheService,
+    //ICacheService cacheService,
     ILogger<CustomerEventHandler> logger) : INotificationHandler<CustomerCreatedDomainEvent>
 {
     private readonly ILogger<CustomerEventHandler> _logger = logger;
     private readonly ISynchronizeDb _synchronizeDb = synchronizeDb;
     private readonly IMapper _mapper = mapper;
-    private readonly ICacheService _cacheService = cacheService;
+    //private readonly ICacheService _cacheService = cacheService;
     public async Task Handle(CustomerCreatedDomainEvent notification, CancellationToken cancellationToken)
     {
         LogEvent(notification);
@@ -39,7 +39,7 @@ public class CustomerEventHandler(
     private async Task ClearCacheAsync(CustomerBaseDomainEvent @event)
     {
         var cacheKeys = new[] { nameof(GetAllCustomerQuery), $"{nameof(GetCustomerByIdQuery)}_{@event.Id}" };
-        await _cacheService.RemoveAsync(cacheKeys);
+        //await _cacheService.RemoveAsync(cacheKeys);
     }
 
     private void LogEvent<TEvent>(TEvent @event) where TEvent : CustomerBaseDomainEvent =>

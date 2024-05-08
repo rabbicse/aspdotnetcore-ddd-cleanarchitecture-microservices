@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.ResponseCompression;
 using KYC.Application;
 using KYC.Write.MsSql.Infrastructure;
+using KYC.Read.Mongo.Infrastructure;
 using KYC.EventStoreDB.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,13 +21,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Add dependencies from Application layer
-//builder.Services.AddQueryHandlers();
-//builder.Services.AddReadDbContext();
-//builder.Services.AddReadOnlyRepositories();
 builder.Services.AddApplications();
 
 // Add dependencies from Infra layer
 builder.Services.AddWriteInfrastructureServices(builder.Configuration);
+builder.Services.AddReadInfrastructureServices(builder.Configuration);
 builder.Services.AddEventStoreInfrastructureServices(builder.Configuration);
 //builder.Services.AddCacheInfrastructureServices(builder.Configuration);
 

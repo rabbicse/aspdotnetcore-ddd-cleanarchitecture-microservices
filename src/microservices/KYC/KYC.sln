@@ -23,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KYC.Application", "src\Appl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KYC.API", "src\Presentation\KYC.API\KYC.API.csproj", "{5928198C-8D61-45E4-834D-0F4EB03B03F6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KYC.Read.Infrastructure", "src\Infrastructures\KYC.Read.Infrastructure\KYC.Read.Infrastructure.csproj", "{AC0B1827-2763-4A42-B215-327B34C0E9A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KYC.Read.Mongo.Infrastructure", "src\Infrastructures\KYC.Read.Infrastructure\KYC.Read.Mongo.Infrastructure.csproj", "{AC0B1827-2763-4A42-B215-327B34C0E9A6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KYC.EventStoreDB.Infrastructure", "src\Infrastructures\KYC.EventStoreDB.Infrastructure\KYC.EventStoreDB.Infrastructure.csproj", "{6B0C8451-4B5C-49DF-8624-388D99474A05}"
 EndProject

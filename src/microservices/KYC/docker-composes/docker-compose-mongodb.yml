@@ -1,0 +1,11 @@
+version: '3.8'
+services:
+  mongodb:
+    image: mongodb/mongodb-community-server:latest
+    ports:
+      - "8017:27017"
+    environment:
+      - MONGODB_INITDB_ROOT_USERNAME=user
+      - MONGODB_INITDB_ROOT_PASSWORD=pass
+    volumes:
+      - ./data:/data/db

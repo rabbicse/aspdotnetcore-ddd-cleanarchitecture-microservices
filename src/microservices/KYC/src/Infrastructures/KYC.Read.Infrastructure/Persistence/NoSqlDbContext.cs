@@ -1,10 +1,7 @@
 ﻿using KYC.Application.UseCases.Customers.DTOs;
 using Mehedi.Application.SharedKernel.Persistence;
 using Mehedi.Core.SharedKernel;
-using Mehedi.Read.Infrastructure.SharedKernel;
-using Mehedi.Read.Infrastructure.SharedKernel.Interfaces;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using Polly;
 using Polly.Retry;
@@ -12,8 +9,9 @@ using System.Linq.Expressions;
 using System.Reflection;
 using Mehedi.Application.SharedKernel.Extensions;
 using Microsoft.Extensions.Configuration;
+using Mehedi.Read.NoSql.Infrastructure.Abstractions;
 
-namespace KYC.Read.Infrastructure.Persistence;
+namespace KYC.Read.Mongo.Infrastructure.Persistence;
 
 public sealed class NoSqlDbContext : IReadDbContext, ISynchronizeDb
 {
