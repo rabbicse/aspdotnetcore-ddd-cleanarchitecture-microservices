@@ -21,5 +21,6 @@ public class CreateCustomerCommand : IRequest<Result<CreatedCustomerResponse>>
     [Required]
     [DataType(DataType.Date)]
     public DateTime Dob { get; set; }
-    public Address? CustomerAddress { get; set; }
+
+    public AddressRequest? CustomerAddress { get; set; }
 }

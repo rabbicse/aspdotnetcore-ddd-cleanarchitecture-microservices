@@ -3,6 +3,7 @@ using KYC.Application;
 using KYC.Write.MsSql.Infrastructure;
 using KYC.Read.Mongo.Infrastructure;
 using KYC.EventStore.EventStoreDB.Infrastructure;
+using KYC.API;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,7 @@ builder.Services.AddSwaggerGen();
 
 // Add dependencies from Application layer
 builder.Services.AddApplications();
+builder.Services.AddEventBus(builder.Configuration);
 
 // Add dependencies from Infra layer
 builder.Services.AddWriteInfrastructureServices(builder.Configuration);
