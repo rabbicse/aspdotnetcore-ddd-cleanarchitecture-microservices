@@ -3,6 +3,7 @@ using KYC.Application;
 using KYC.Write.MsSql.Infrastructure;
 using KYC.Read.Mongo.Infrastructure;
 using KYC.EventStore.EventStoreDB.Infrastructure;
+using KYC.RedisCache.Infrastructure;
 using KYC.API;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,7 +30,7 @@ builder.Services.AddEventBus(builder.Configuration);
 builder.Services.AddWriteInfrastructureServices(builder.Configuration);
 builder.Services.AddReadInfrastructureServices(builder.Configuration);
 builder.Services.AddEventStoreInfrastructureServices(builder.Configuration);
-//builder.Services.AddCacheInfrastructureServices(builder.Configuration);
+builder.Services.AddCacheInfrastructureServices(builder.Configuration);
 
 var app = builder.Build();
 

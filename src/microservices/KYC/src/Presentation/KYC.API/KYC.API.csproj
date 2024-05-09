@@ -23,6 +23,7 @@
     <ProjectReference Include="..\..\Core\KYC.Domain\KYC.Domain.csproj" />
     <ProjectReference Include="..\..\Infrastructures\KYC.EventStore.EventStoreDB.Infrastructure\KYC.EventStore.EventStoreDB.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Infrastructures\KYC.Read.Mongo.Infrastructure\KYC.Read.Mongo.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Infrastructures\KYC.RedisCache.Infrastructure\KYC.RedisCache.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Infrastructures\KYC.Write.MsSql.Infrastructure\KYC.Write.MsSql.Infrastructure.csproj" />
   </ItemGroup>
 

@@ -38,11 +38,11 @@ public class CreateCustomerCommandHandler(
         // Creating an instance of the customer entity.
         // When instantiated, the "CustomerCreatedEvent" will be created.
         var address = new Address(
-            street: "New Airport Road",
-            city: "Dhaka",
-            state: "Dhaka",
-            country: "Bangladesh",
-            zipcode: "1205");
+            street: request.CustomerAddress?.Street,
+            city: request.CustomerAddress?.City,
+            state: request.CustomerAddress?.State,
+            country: request.CustomerAddress?.Country,
+            zipcode: request.CustomerAddress?.ZipCode);
         var customer = new Customer(request.FirstName,
             request.LastName,
             request.Dob,
