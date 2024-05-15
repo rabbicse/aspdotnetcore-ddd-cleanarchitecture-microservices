@@ -11,12 +11,15 @@ Develop microservices in ASP.NET Core and C# with the following patterns and pri
 - C#
 - ASP.NET Core 8
 - MediatR
+- Hangfire
 - AutoMapper
 - EntityFrameworkCore
 - Apache Kafka
 - EventStoreDB
+- Redis
 - MongoDB
 - Postgres
+- Microsoft SQL Server
 - Docker and Docker Compose
 
 ## References
