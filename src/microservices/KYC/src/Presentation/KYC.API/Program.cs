@@ -5,6 +5,9 @@ using KYC.Read.Mongo.Infrastructure;
 using KYC.EventStore.EventStoreDB.Infrastructure;
 using KYC.RedisCache.Infrastructure;
 using KYC.API;
+using Hangfire;
+using Hangfire.PostgreSql;
+using Mehedi.Hangfire.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +35,15 @@ builder.Services.AddReadInfrastructureServices(builder.Configuration);
 builder.Services.AddEventStoreInfrastructureServices(builder.Configuration);
 builder.Services.AddCacheInfrastructureServices(builder.Configuration);
 
+
+// Add hangfire for background service
+builder.Services.AddHangfire(config =>
+{
+    config.UsePostgreSqlStorage(c => c.UseNpgsqlConnection(builder.Configuration.GetConnectionString("HangfireConnection")));
+    config.UseMediatR(); // Custom extension built on 
+});
+builder.Services.AddHangfireServer();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -40,6 +52,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+// Configure hangfire dashboard
+app.UseHangfireDashboard();
 
 //app.UseHttpsRedirection();
 

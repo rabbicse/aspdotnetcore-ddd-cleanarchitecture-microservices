@@ -1,8 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Net.Mime;
 using KYC.Application.UseCases.Customers.Commands;
+using KYC.Application.UseCases.Customers.DTOs;
 using KYC.Application.UseCases.Customers.Queries;
 using MediatR;
+using Mehedi.Application.SharedKernel.Responses;
+using Mehedi.Hangfire.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KYC.API.Controllers;
@@ -28,10 +31,11 @@ public class CustomersController(IMediator mediator) : ControllerBase
     //[ProducesResponseType(typeof(ApiResponse<CreatedCustomerResponse>), StatusCodes.Status200OK)]
     //[ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     //[ProducesResponseType(typeof(ApiResponse), StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Create([FromBody][Required] CreateCustomerCommand command)
+    public IActionResult Create([FromBody][Required] CreateCustomerCommand command)
     {
-        await _mediator.Send(command);
-        return Ok();
+        //await _mediator.Send(command);
+        _mediator.Enqueue(nameof(CreateCustomerCommand), command);
+        return Ok("Customer Command Request Accepted");
     }
 
     ///////////////////////
