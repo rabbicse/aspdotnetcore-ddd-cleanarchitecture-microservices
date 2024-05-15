@@ -30,3 +30,6 @@ export DOCKER_HOST_IP=192.168.0.100
 ```
 
 Here, 192.168.0.100 is docker hosted ip address.
+
+## Postgres on Docker
+
