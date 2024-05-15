@@ -32,4 +32,11 @@ export DOCKER_HOST_IP=192.168.0.100
 Here, 192.168.0.100 is docker hosted ip address.
 
 ## Postgres on Docker
+Please check the following docker compose file from [docker-compose-postgres.yml](https://github.com/rabbicse/aspdotnetcore-ddd-cleanarchitecture-microservices/blob/master/src/microservices/KYC/docker-composes/docker-compose-postgres.yml) 
+and write the following command to run on local machine. Make sure you've installed Docker Engine for Linux or Docker Desktop for Windows/MacOS.
+
+```
+docker compose -f docker-compose-postgres.yml up -d
+```
+It'll expose on port: 5432
 
