@@ -27,3 +27,5 @@ Develop microservices in ASP.NET Core and C# with the following patterns and pri
 - [eShop](https://github.com/dotnet/eShop)
 - [CodeOpinion](https://www.youtube.com/@CodeOpinion)
 - [MilanJovanovicTech](https://www.youtube.com/@MilanJovanovicTech)
+- [Clean Architecture Solution Template](https://github.com/jasontaylordev/CleanArchitecture)
+- [ASP.NET Core C# CQRS Event Sourcing, REST API, DDD, SOLID Principles and Clean Architecture](https://github.com/jeangatto/ASP.NET-Core-Clean-Architecture-CQRS-Event-Sourcing)
