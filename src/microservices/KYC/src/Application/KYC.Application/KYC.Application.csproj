@@ -5,7 +5,9 @@
     <PackageReference Include="MediatR" />
     <PackageReference Include="Mehedi.Application.SharedKernel" />
     <PackageReference Include="Mehedi.EventBus.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" VersionOverride="10.0.14" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Logging" VersionOverride="10.0.14" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
   </ItemGroup>
 

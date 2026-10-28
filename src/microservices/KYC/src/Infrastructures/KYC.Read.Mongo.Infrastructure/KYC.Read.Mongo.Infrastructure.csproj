@@ -4,7 +4,9 @@
     <PackageReference Include="MediatR" />
     <PackageReference Include="Mehedi.Read.NoSql.Infrastructure.Abstractions" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" VersionOverride="10.0.14" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Logging" VersionOverride="10.0.14" />
     <PackageReference Include="MongoDB.Driver" />
     <PackageReference Include="Polly" />
   </ItemGroup>
