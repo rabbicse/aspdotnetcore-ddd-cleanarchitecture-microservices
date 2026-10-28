@@ -38,7 +38,7 @@ def report_logs(paths: list[str]) -> None:
             continue
         with open(path, encoding="utf-8", errors="replace") as handle:
             lines = handle.read().splitlines()
-        interesting = [line for line in lines if any(word in line for word in (" error ", "error NU", "error CS", "error MSB", "Failed", "Exception", "exception"))]
+        interesting = [line for line in lines if any(word in line for word in (": error ", "error NU", "error CS", "error MSB", "Unhandled exception", "fail:", "crit:"))]
         if not interesting and not path.endswith("compose.log"):
             continue
         tail = (interesting or lines)[-40:]

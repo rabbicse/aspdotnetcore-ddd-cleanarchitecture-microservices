@@ -20,7 +20,8 @@ public static class DependencyInjection
                 $"Connection string 'ConnectionStrings:{ConnectionStringName}' is not configured.");
 
         services.AddOptions<CacheOptions>()
-            .BindConfiguration(CacheOptions.Name, binderOptions => binderOptions.BindNonPublicProperties = true)
+            // Bind from the configuration passed in, so the method works without IConfiguration in the container.
+            .Bind(config.GetSection(CacheOptions.Name), binderOptions => binderOptions.BindNonPublicProperties = true)
             .Validate(
                 options => options.AbsoluteExpirationInHours > 0 && options.SlidingExpirationInSeconds > 0,
                 $"{CacheOptions.Name}:AbsoluteExpirationInHours and {CacheOptions.Name}:SlidingExpirationInSeconds must both be greater than zero.");
