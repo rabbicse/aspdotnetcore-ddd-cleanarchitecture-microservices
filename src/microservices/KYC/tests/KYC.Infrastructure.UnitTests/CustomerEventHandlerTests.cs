@@ -5,7 +5,7 @@ using KYC.Domain.Aggregates.CustomerAggregate.Events;
 using KYC.Domain.ValueObjects;
 using KYC.Read.Mongo.Infrastructure.EventHandlers;
 using Mehedi.Application.SharedKernel.Services;
-using Mehedi.Read.NoSql.Infrastructure.Abstractions;
+using Mehedi.Application.SharedKernel.Persistence;
 using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
@@ -14,7 +14,7 @@ namespace KYC.Infrastructure.UnitTests;
 
 public class CustomerEventHandlerTests
 {
-    private readonly ISynchronizeDb _synchronizeDb = Substitute.For<ISynchronizeDb>();
+    private readonly IReadDbContext _synchronizeDb = Substitute.For<IReadDbContext>();
     private readonly ICacheService _cache = Substitute.For<ICacheService>();
     private readonly CustomerEventHandler _handler;
 

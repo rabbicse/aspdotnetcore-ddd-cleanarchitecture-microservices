@@ -1,7 +1,7 @@
-﻿using Mehedi.Application.SharedKernel.Persistence;
+using KYC.Domain.Aggregates.CustomerAggregate;
+using Mehedi.Core.SharedKernel;
 
 namespace KYC.Application.UseCases.Customers.Repositories;
 
-public interface ICustomerCommandRepository : ICommandRepository<Domain.Aggregates.CustomerAggregate.Customer, Guid>
-{
-}
+/// <summary>Write-side repository of the <see cref="Customer"/> aggregate.</summary>
+public interface ICustomerCommandRepository : ICommandRepository<Customer, Guid>;

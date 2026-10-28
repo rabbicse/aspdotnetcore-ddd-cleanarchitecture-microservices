@@ -1,4 +1,4 @@
-﻿using KYC.Domain.Aggregates.CustomerAggregate.Events;
+using KYC.Domain.Aggregates.CustomerAggregate.Events;
 using KYC.Domain.ValueObjects;
 using Mehedi.Core.SharedKernel;
 
@@ -8,7 +8,7 @@ namespace KYC.Domain.Aggregates.CustomerAggregate;
 /// Customer aggregate root. All invariants are enforced here, so an invalid
 /// <see cref="Customer"/> can never be constructed or persisted.
 /// </summary>
-public class Customer : BaseEntity, IAggregateRoot
+public class Customer : BaseEntity<Guid>, IAggregateRoot
 {
     /// <summary>Maximum length of <see cref="FirstName"/> and <see cref="LastName"/>.</summary>
     public const int MaxNameLength = 100;
@@ -44,6 +44,9 @@ public class Customer : BaseEntity, IAggregateRoot
         Dob = ValidateDateOfBirth(dob, today);
         Address = address ?? Address.Empty;
     }
+
+    /// <summary>New customers get a random (version 4) id when they are constructed.</summary>
+    protected override Guid GenerateNewId() => Guid.NewGuid();
 
     #region Properties
     /// <summary>Gets the first name of the customer.</summary>

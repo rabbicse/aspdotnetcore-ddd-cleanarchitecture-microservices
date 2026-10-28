@@ -37,14 +37,14 @@
     <PackageVersion Include="Polly" Version="8.5.0" />
   </ItemGroup>
 
-  <ItemGroup Label="Mehedi shared packages (pinned to the versions this service was written against)">
-    <PackageVersion Include="Mehedi.Application.SharedKernel" Version="1.0.0" />
-    <PackageVersion Include="Mehedi.Core.SharedKernel" Version="1.0.0" />
-    <PackageVersion Include="Mehedi.EventBus.Abstractions" Version="1.0.0" />
-    <PackageVersion Include="Mehedi.EventBus.Kafka" Version="1.0.0" />
+  <ItemGroup Label="Mehedi shared packages">
+    <PackageVersion Include="Mehedi.Application.SharedKernel" Version="1.0.20" />
+    <PackageVersion Include="Mehedi.Core.SharedKernel" Version="1.0.7" />
+    <PackageVersion Include="Mehedi.EventBus.Abstractions" Version="1.0.1" />
+    <PackageVersion Include="Mehedi.EventBus.Kafka" Version="1.0.12" />
     <PackageVersion Include="Mehedi.Hangfire.Extensions" Version="1.0.2" />
-    <PackageVersion Include="Mehedi.Read.NoSql.Infrastructure.Abstractions" Version="1.0.0" />
-    <PackageVersion Include="Mehedi.Write.RDBMS.Infrastructure.Abstractions" Version="1.0.0" />
+    <PackageVersion Include="Mehedi.Read.NoSql.Infrastructure.Abstractions" Version="1.0.4" />
+    <PackageVersion Include="Mehedi.Write.RDBMS.Infrastructure.Abstractions" Version="1.0.6" />
   </ItemGroup>
 
   <ItemGroup Label="Testing">

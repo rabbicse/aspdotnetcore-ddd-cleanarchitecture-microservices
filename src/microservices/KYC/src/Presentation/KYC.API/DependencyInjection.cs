@@ -16,8 +16,9 @@ public static class DependencyInjection
         var topic = config["eventsTopicName"]
             ?? throw new InvalidOperationException("Setting 'eventsTopicName' is not configured.");
 
+        // The instance id is written to every message's "sender" header.
         return services
-            .AddSingleton(new KafkaProducerConfig(bootstrapServers, topic))
-            .AddSingleton<IEventProducer, EventProducer>();
+            .AddSingleton(new KafkaProducerConfig(bootstrapServers, topic, instanceId: "kyc-api"))
+            .AddSingleton<IEventProducer, KafkaEventProducer>();
     }
 }

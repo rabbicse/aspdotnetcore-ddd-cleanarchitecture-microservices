@@ -3,7 +3,7 @@ using KYC.Application.UseCases.Customers.Queries;
 using KYC.Domain.Aggregates.CustomerAggregate.Events;
 using MediatR;
 using Mehedi.Application.SharedKernel.Services;
-using Mehedi.Read.NoSql.Infrastructure.Abstractions;
+using Mehedi.Application.SharedKernel.Persistence;
 using Microsoft.Extensions.Logging;
 
 namespace KYC.Read.Mongo.Infrastructure.EventHandlers;
@@ -19,7 +19,7 @@ namespace KYC.Read.Mongo.Infrastructure.EventHandlers;
 /// Personal data (names, date of birth) is deliberately NOT written to the logs.
 /// </remarks>
 public sealed class CustomerEventHandler(
-    ISynchronizeDb synchronizeDb,
+    IReadDbContext readDb,
     ICacheService cacheService,
     ILogger<CustomerEventHandler> logger) : INotificationHandler<CustomerCreatedDomainEvent>
 {
@@ -36,7 +36,7 @@ public sealed class CustomerEventHandler(
                 notification.LastName,
                 notification.Dob);
 
-            await synchronizeDb.UpsertAsync(queryModel, filter => filter.Id == queryModel.Id);
+            await readDb.UpsertAsync(queryModel, filter => filter.Id == queryModel.Id);
 
             await cacheService.RemoveAsync(
                 GetAllCustomerQueryHandler.CacheKey,

@@ -2,7 +2,7 @@ using KYC.Application.UseCases.Customers.DTOs;
 using KYC.Application.UseCases.Customers.Repositories;
 using KYC.Infrastructure.IntegrationTests.Fixtures;
 using KYC.Read.Mongo.Infrastructure;
-using Mehedi.Read.NoSql.Infrastructure.Abstractions;
+using Mehedi.Application.SharedKernel.Persistence;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -31,7 +31,7 @@ public sealed class MongoReadSideTests(MongoFixture mongo) : IClassFixture<Mongo
     public async Task An_upserted_customer_can_be_found_by_id()
     {
         using var provider = BuildProvider();
-        var synchronizeDb = provider.GetRequiredService<ISynchronizeDb>();
+        var synchronizeDb = provider.GetRequiredService<IReadDbContext>();
         var id = Guid.NewGuid();
         var model = NewModel(id);
 
@@ -51,7 +51,7 @@ public sealed class MongoReadSideTests(MongoFixture mongo) : IClassFixture<Mongo
     public async Task Upserting_the_same_customer_twice_keeps_a_single_document()
     {
         using var provider = BuildProvider();
-        var synchronizeDb = provider.GetRequiredService<ISynchronizeDb>();
+        var synchronizeDb = provider.GetRequiredService<IReadDbContext>();
         var id = Guid.NewGuid();
 
         await synchronizeDb.UpsertAsync(NewModel(id, "Ada"), filter => filter.Id == id);
@@ -68,7 +68,7 @@ public sealed class MongoReadSideTests(MongoFixture mongo) : IClassFixture<Mongo
     public async Task Customers_that_share_a_first_name_can_coexist()
     {
         using var provider = BuildProvider();
-        var synchronizeDb = provider.GetRequiredService<ISynchronizeDb>();
+        var synchronizeDb = provider.GetRequiredService<IReadDbContext>();
         var first = Guid.NewGuid();
         var second = Guid.NewGuid();
 

@@ -1,10 +1,10 @@
 using KYC.Application.UseCases.Customers.Repositories;
-using KYC.Read.Infrastructure.Repositories;
+using KYC.Read.Mongo.Infrastructure.Repositories;
 using KYC.Read.Mongo.Infrastructure.Persistence;
 using Mehedi.Application.SharedKernel.Persistence;
-using Mehedi.Read.NoSql.Infrastructure.Abstractions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Conventions;
@@ -20,24 +20,29 @@ public static class DependencyInjection
     /// Registers the MongoDB read side: the notification handlers that project domain events into
     /// the read model, the database context and the query repositories.
     /// </summary>
-    /// <param name="configuration">Kept for API compatibility; the connection string is read by <see cref="NoSqlDbContext"/>.</param>
+    public const string ConnectionStringName = "NoSqlConnection";
+
+    /// <exception cref="InvalidOperationException">The <c>ConnectionStrings:NoSqlConnection</c> setting is missing.</exception>
     public static IServiceCollection AddReadInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
+        var connectionString = configuration.GetConnectionString(ConnectionStringName)
+            ?? throw new InvalidOperationException(
+                $"Connection string 'ConnectionStrings:{ConnectionStringName}' is not configured.");
+
         var assembly = typeof(DependencyInjection).Assembly;
 
         return services
             // Registers CustomerEventHandler (merged with the application layer's MediatR registration).
             .AddMediatR(cfg => cfg.RegisterServicesFromAssembly(assembly))
-            .AddReadDbContext()
+            .AddReadDbContext(connectionString)
             .AddReadOnlyRepositories();
     }
 
-    private static IServiceCollection AddReadDbContext(this IServiceCollection services)
+    private static IServiceCollection AddReadDbContext(this IServiceCollection services, string connectionString)
     {
-        // One NoSqlDbContext (and therefore one MongoClient connection pool) exposed through both abstractions.
+        // One NoSqlDbContext, and therefore one MongoClient connection pool, for the whole process.
         services
-            .AddSingleton<NoSqlDbContext>()
-            .AddSingleton<ISynchronizeDb>(provider => provider.GetRequiredService<NoSqlDbContext>())
+            .AddSingleton(provider => new NoSqlDbContext(connectionString, provider.GetRequiredService<ILogger<NoSqlDbContext>>()))
             .AddSingleton<IReadDbContext>(provider => provider.GetRequiredService<NoSqlDbContext>());
 
         ConfigureMongoDb();
