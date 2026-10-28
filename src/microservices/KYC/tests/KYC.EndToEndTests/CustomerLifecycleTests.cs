@@ -69,8 +69,6 @@ public sealed class CustomerLifecycleTests : IClassFixture<KycStack>
         var response = await _stack.Client.PostAsJsonAsync("/api/customers/async", KycStack.NewCustomer(lastName));
 
         Assert.Equal(HttpStatusCode.Accepted, response.StatusCode);
-        var body = await response.Content.ReadFromJsonAsync<JsonElement>();
-        Assert.False(string.IsNullOrWhiteSpace(body.GetProperty("jobId").GetString()));
 
         var found = await KycStack.EventuallyAsync(
             async () => (await _stack.ListAsync()).FirstOrDefault(customer => customer.LastName == lastName),

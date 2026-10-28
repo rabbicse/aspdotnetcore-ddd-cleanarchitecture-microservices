@@ -21,7 +21,7 @@ public class ValidationBehaviorTests
     private static (RequestHandlerDelegate<string> Next, Func<int> Calls) CountingNext()
     {
         var calls = 0;
-        return (() => { calls++; return Task.FromResult("handled"); }, () => calls);
+        return (_ => { calls++; return Task.FromResult("handled"); }, () => calls);
     }
 
     [Fact]

@@ -8,7 +8,7 @@ Base URL when running with Docker: `http://localhost:8080`. The machine-readable
 | Method | Path | Success | Errors |
 |---|---|---|---|
 | `POST` | `/api/customers` | `201` + `Location`, body `{ "id": "<guid>" }` | `400`, `415`, `500` |
-| `POST` | `/api/customers/async` | `202`, body `{ "jobId": "<id>" }` | `400` |
+| `POST` | `/api/customers/async` | `202` | `400` |
 | `GET` | `/api/customers/{id}` | `200` customer | `404` |
 | `GET` | `/api/customers` | `200` array of customers | — |
 | `GET` | `/health/live` | `200` | — |
@@ -46,7 +46,7 @@ Validates immediately, then queues the work in Hangfire. Use it when the caller 
 curl -i -X POST http://localhost:8080/api/customers/async \
   -H 'Content-Type: application/json' \
   -d '{"firstName":"Grace","lastName":"Hopper","dob":"1985-12-09"}'
-# HTTP/1.1 202 Accepted   {"jobId":"42"}
+# HTTP/1.1 202 Accepted
 ```
 
 The job and its retries are visible on the Hangfire dashboard at `/hangfire` (local requests only).

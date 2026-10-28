@@ -38,7 +38,7 @@ public class CustomersController(IMediator mediator) : ControllerBase
     /// Queues the registration as a background (Hangfire) job and returns immediately (HTTP 202).
     /// The customer appears in <c>GET /api/customers</c> once the job has run.
     /// </summary>
-    /// <response code="202">The job was queued. The body contains the Hangfire job id.</response>
+    /// <response code="202">The job was queued.</response>
     /// <response code="400">The request is invalid. Nothing was queued.</response>
     [HttpPost("async")]
     [Consumes(MediaTypeNames.Application.Json)]
@@ -56,9 +56,9 @@ public class CustomersController(IMediator mediator) : ControllerBase
             return ValidationProblem(new ValidationProblemDetails(validation.ToDictionary()));
         }
 
-        var jobId = mediator.Enqueue(nameof(CreateCustomerCommand), command);
+        mediator.Enqueue(nameof(CreateCustomerCommand), command);
 
-        return Accepted(new { jobId });
+        return Accepted();
     }
 
     /// <summary>Gets a customer by id.</summary>

@@ -108,8 +108,9 @@ public sealed class RedisCacheTests(RedisFixture redis) : IClassFixture<RedisFix
         IReadOnlyList<CustomerQueryModel> original = [new CustomerQueryModel(id, "Ada", "Lovelace", new DateTime(1990, 5, 17))];
 
         await cache.GetOrCreateAsync<CustomerQueryModel>(key, () => Task.FromResult(original));
-        var cached = await cache.GetOrCreateAsync<CustomerQueryModel>(
-            key, () => throw new InvalidOperationException("The value should have come from the cache."));
+        Func<Task<IReadOnlyList<CustomerQueryModel>>> mustNotRun =
+            () => throw new InvalidOperationException("The value should have come from the cache.");
+        var cached = await cache.GetOrCreateAsync<CustomerQueryModel>(key, mustNotRun);
 
         var customer = Assert.Single(cached);
         Assert.Equal(id, customer.Id);
