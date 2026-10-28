@@ -2,7 +2,7 @@ name: KYC CI
 
 on:
   push:
-    branches: [master, "modernize/**"]
+    branches: [master, "modernize/**", "feature/**"]
     paths:
       - "src/microservices/KYC/**"
       - ".github/workflows/kyc-ci.yml"
