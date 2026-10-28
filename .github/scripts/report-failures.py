@@ -38,7 +38,9 @@ def report_logs(paths: list[str]) -> None:
             continue
         with open(path, encoding="utf-8", errors="replace") as handle:
             lines = handle.read().splitlines()
-        interesting = [line for line in lines if any(word in line for word in ("fail", "Fail", "error", "Error", "Exception", "exception"))]
+        interesting = [line for line in lines if any(word in line for word in (" error ", "error NU", "error CS", "error MSB", "Failed", "Exception", "exception"))]
+        if not interesting and not path.endswith("compose.log"):
+            continue
         tail = (interesting or lines)[-40:]
         print(f"::error title=Log excerpt: {os.path.basename(path)}::{escape(chr(10).join(tail)[-3500:])}")
 

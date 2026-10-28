@@ -33,6 +33,7 @@ jobs:
     timeout-minutes: 30
     defaults:
       run:
+        shell: bash
         working-directory: ${{ env.KYC_DIR }}
     steps:
       - uses: actions/checkout@v4
@@ -48,10 +49,10 @@ jobs:
           restore-keys: nuget-${{ runner.os }}-
 
       - name: Restore
-        run: dotnet restore KYC.slnx
+        run: mkdir -p logs && dotnet restore KYC.slnx 2>&1 | tee logs/restore.log
 
       - name: Build
-        run: dotnet build KYC.slnx --no-restore --configuration Release
+        run: dotnet build KYC.slnx --no-restore --configuration Release 2>&1 | tee logs/build.log
 
       - name: Unit and API tests
         run: >
@@ -70,7 +71,7 @@ jobs:
 
       - name: Report failed tests as annotations
         if: failure()
-        run: python3 "$GITHUB_WORKSPACE/.github/scripts/report-failures.py" TestResults
+        run: python3 "$GITHUB_WORKSPACE/.github/scripts/report-failures.py" TestResults --log logs/restore.log logs/build.log
 
       - name: Upload test results
         if: always()
