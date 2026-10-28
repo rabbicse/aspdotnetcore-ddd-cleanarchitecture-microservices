@@ -68,6 +68,10 @@ jobs:
           --logger "trx;LogFileName=integration.trx"
           --results-directory TestResults/integration
 
+      - name: Report failed tests as annotations
+        if: failure()
+        run: python3 "$GITHUB_WORKSPACE/.github/scripts/report-failures.py" TestResults
+
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v4
@@ -113,6 +117,10 @@ jobs:
       - name: Collect container logs
         if: failure()
         run: docker compose logs --no-color > compose.log
+
+      - name: Report failures as annotations
+        if: failure()
+        run: python3 "$GITHUB_WORKSPACE/.github/scripts/report-failures.py" TestResults --log compose.log
 
       - name: Upload results and logs
         if: always()
