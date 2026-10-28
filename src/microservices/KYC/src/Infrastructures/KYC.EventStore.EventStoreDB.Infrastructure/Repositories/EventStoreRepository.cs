@@ -1,63 +1,46 @@
-﻿using EventStore.Client;
+using System.Text;
+using EventStore.Client;
 using Mehedi.Application.SharedKernel.Services;
 using Microsoft.Extensions.Logging;
-using System.Text.Json;
 
 namespace KYC.EventStore.EventStoreDB.Infrastructure.Repositories;
 
-public sealed class EventStoreRepository(EventStoreClient eventStoreClient, ILogger<EventStoreRepository> logger) : IEventStoreRepository
+/// <summary>
+/// Appends domain events to EventStoreDB. Events are stored in one stream per aggregate
+/// (<c>customer-{aggregateId}</c>) under their own event type name.
+/// </summary>
+public sealed class EventStoreRepository(EventStoreClient eventStoreClient, ILogger<EventStoreRepository> logger)
+    : IEventStoreRepository
 {
-    private readonly EventStoreClient _eventStoreClient = eventStoreClient;
-    private readonly ILogger<EventStoreRepository> _logger = logger;
-    /// <summary>
-    /// Append events asynchronously
-    /// </summary>
-    /// <param name="eventStores"></param>
-    /// <returns></returns>
+    /// <summary>Prefix of every customer stream, e.g. <c>customer-3f2c...</c>.</summary>
+    public const string StreamPrefix = "customer-";
+
     public async Task StoreAsync(IEnumerable<EventStoreEvent> eventStores)
     {
-        if (eventStores == null)
+        ArgumentNullException.ThrowIfNull(eventStores);
+
+        foreach (var aggregateEvents in eventStores.GroupBy(@event => @event.AggregateId.ToString()))
         {
-            return;
+            var streamName = StreamPrefix + aggregateEvents.Key;
+
+            var eventData = aggregateEvents.Select(@event => new EventData(
+                Uuid.FromGuid(@event.Id),
+                @event.MessageType ?? "UnknownEvent",
+                Encoding.UTF8.GetBytes(@event.Data)));
+
+            var result = await eventStoreClient.AppendToStreamAsync(streamName, StreamState.Any, eventData);
+
+            logger.LogInformation(
+                "Appended events to stream {StreamName}, next expected revision {NextExpectedRevision}",
+                streamName,
+                result.NextExpectedStreamRevision);
         }
-
-        // TODO:
-        var result = await _eventStoreClient.AppendToStreamAsync(
-            eventStores.First().Id.ToString(),
-            StreamState.Any,
-            eventStores.Select(ev => new EventData(
-                Uuid.NewUuid(), 
-                "Test Event", 
-                JsonSerializer.SerializeToUtf8Bytes(ev))));
-
-        _logger.LogInformation($"Event Store result: {result.NextExpectedStreamRevision}");
     }
 
-    #region IDisposable
-
-    // To detect redundant calls.
-    private bool _disposed;
-
-    // Public implementation of Dispose pattern callable by consumers.
-    ~EventStoreRepository() => Dispose(false);
-
-    // Public implementation of Dispose pattern callable by consumers.
+    /// <summary>
+    /// Nothing to release: the <see cref="EventStoreClient"/> is a shared singleton owned by the DI container.
+    /// </summary>
     public void Dispose()
     {
-        Dispose(true);
-        GC.SuppressFinalize(this);
     }
-
-    // Protected implementation of Dispose pattern.
-    private void Dispose(bool disposing)
-    {
-        if (_disposed)
-            return;
-
-        // Dispose managed state (managed objects).        
-
-        _disposed = true;
-    }
-
-    #endregion
 }

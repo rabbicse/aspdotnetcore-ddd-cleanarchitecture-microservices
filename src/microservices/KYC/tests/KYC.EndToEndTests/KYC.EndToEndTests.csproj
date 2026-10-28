@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Black-box tests against a RUNNING stack (docker compose up, with the build flag).
+    They are skipped unless KYC_E2E_BASE_URL is set, e.g.  KYC_E2E_BASE_URL=http://localhost:8080
+    This project deliberately references no production code: it only speaks HTTP, like a real client.
+  -->
+
+</Project>

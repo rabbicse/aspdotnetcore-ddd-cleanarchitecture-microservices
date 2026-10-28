@@ -6,7 +6,6 @@ using MongoDB.Driver;
 using Polly;
 using Polly.Retry;
 using System.Linq.Expressions;
-using System.Reflection;
 using Mehedi.Application.SharedKernel.Extensions;
 using Microsoft.Extensions.Configuration;
 using Mehedi.Read.NoSql.Infrastructure.Abstractions;
@@ -19,17 +18,15 @@ public sealed class NoSqlDbContext : IReadDbContext, ISynchronizeDb
 
     private const string DatabaseName = "KYC";
     private const int RetryCount = 2;
-    private static readonly Random Rnd = new();
-
     private static readonly ReplaceOptions DefaultReplaceOptions = new()
     {
         IsUpsert = true
     };
 
+    // Not unique: many customers legitimately share a first name.
     private static readonly CreateIndexOptions DefaultCreateIndexOptions = new()
     {
-        Unique = true,
-        Sparse = true
+        Unique = false
     };
 
     private readonly IMongoDatabase _database;
@@ -38,7 +35,8 @@ public sealed class NoSqlDbContext : IReadDbContext, ISynchronizeDb
 
     public NoSqlDbContext(IConfiguration config, ILogger<NoSqlDbContext> logger)
     {
-        var connectionString = config.GetConnectionString("NoSqlConnection");
+        var connectionString = config.GetConnectionString("NoSqlConnection")
+            ?? throw new InvalidOperationException("Connection string 'ConnectionStrings:NoSqlConnection' is not configured.");
 
         var mongoClient = new MongoClient(connectionString);
         _database = mongoClient.GetDatabase(DatabaseName);
@@ -79,7 +77,7 @@ public sealed class NoSqlDbContext : IReadDbContext, ISynchronizeDb
 
     private async Task CreateIndexAsync()
     {
-        // Define the index key as ascending order of the Email field in the CustomerQueryModel class
+        // Define the index key as ascending order of the FirstName field in the CustomerQueryModel class
         var indexDefinition = Builders<CustomerQueryModel>.IndexKeys.Ascending(model => model.FirstName);
 
         // Create an index model with the defined index key and default index options
@@ -90,8 +88,7 @@ public sealed class NoSqlDbContext : IReadDbContext, ISynchronizeDb
     }
 
     private static List<string> GetCollectionNamesFromAssembly() =>
-        Assembly
-            .GetExecutingAssembly()
+        typeof(CustomerQueryModel).Assembly
             .GetAllTypesOf<IQueryModel>()
             .Select(impl => impl.Name)
             .Distinct()
@@ -133,7 +130,7 @@ public sealed class NoSqlDbContext : IReadDbContext, ISynchronizeDb
             // but then at progressively longer intervals: for example, after 2, 4, 8, 15, then 30 seconds.
             // REF: https://github.com/App-vNext/Polly/wiki/Retry-with-jitter#simple-jitter
             var sleepDuration =
-                TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)) + TimeSpan.FromMilliseconds(Rnd.Next(0, 1000));
+                TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)) + TimeSpan.FromMilliseconds(Random.Shared.Next(0, 1000));
 
             logger.LogWarning("----- MongoDB: Retry #{Count} with delay {Delay}", retryAttempt, sleepDuration);
             return sleepDuration;

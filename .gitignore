@@ -396,3 +396,9 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Local secrets and test output
+.env
+TestResults/
+coverage/
+*.trx

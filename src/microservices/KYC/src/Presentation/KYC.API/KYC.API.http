@@ -1,0 +1,61 @@
+### KYC API — runnable examples for the VS Code REST Client / JetBrains HTTP Client / Visual Studio.
+### Start the stack first:  docker compose up --build   (see docs/getting-started.md)
+
+@host = http://localhost:8080
+
+### Liveness (is the process up?)
+GET {{host}}/health/live
+
+### Readiness (do SQL Server and Redis answer?)
+GET {{host}}/health/ready
+
+### Register a customer (201 Created + Location header)
+# @name createCustomer
+POST {{host}}/api/customers
+Content-Type: application/json
+
+{
+  "firstName": "Ada",
+  "lastName": "Lovelace",
+  "dob": "1990-05-17",
+  "customerAddress": {
+    "street": "12 St James's Square",
+    "city": "London",
+    "state": "England",
+    "country": "United Kingdom",
+    "zipCode": "SW1Y 4JH"
+  }
+}
+
+### Read the customer back (uses the id from the response above)
+@customerId = {{createCustomer.response.body.$.id}}
+GET {{host}}/api/customers/{{customerId}}
+
+### List all customers
+GET {{host}}/api/customers
+
+### Register in the background through Hangfire (202 Accepted + job id)
+POST {{host}}/api/customers/async
+Content-Type: application/json
+
+{
+  "firstName": "Grace",
+  "lastName": "Hopper",
+  "dob": "1985-12-09"
+}
+
+### Validation failure (400 application/problem+json listing FirstName and Dob)
+POST {{host}}/api/customers
+Content-Type: application/json
+
+{
+  "firstName": "",
+  "lastName": "Turing",
+  "dob": "2999-01-01"
+}
+
+### Unknown customer (404 application/problem+json)
+GET {{host}}/api/customers/00000000-0000-0000-0000-000000000001
+
+### OpenAPI document (Development / Docker only)
+GET {{host}}/openapi/v1.json

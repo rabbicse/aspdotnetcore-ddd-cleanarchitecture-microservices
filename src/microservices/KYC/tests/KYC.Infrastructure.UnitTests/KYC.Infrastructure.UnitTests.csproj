@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+    <PackageReference Include="NSubstitute" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Infrastructures\KYC.EventStore.EventStoreDB.Infrastructure\KYC.EventStore.EventStoreDB.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\Infrastructures\KYC.Read.Mongo.Infrastructure\KYC.Read.Mongo.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\Infrastructures\KYC.RedisCache.Infrastructure\KYC.RedisCache.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\Infrastructures\KYC.Write.MsSql.Infrastructure\KYC.Write.MsSql.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

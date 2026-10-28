@@ -1,4 +1,4 @@
-﻿using EventStore.Client;
+using EventStore.Client;
 using KYC.EventStore.EventStoreDB.Infrastructure.Repositories;
 using Mehedi.Application.SharedKernel.Services;
 using Microsoft.Extensions.Configuration;
@@ -6,48 +6,27 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace KYC.EventStore.EventStoreDB.Infrastructure;
 
-public class EventStoreDBConfig
-{
-    public string ConnectionString { get; set; } = default!;
-}
-
-public record EventStoreDBOptions(
-    bool UseInternalCheckpointing = true
-);
-
 public static class DependencyInjection
 {
-    private const string DefaultConfigKey = "EventStoreDbConnection";
-    //public static IServiceCollection AddEventStoreDB(
-    //    this IServiceCollection services,
-    //    IConfiguration config,
-    //    EventStoreDBOptions? options = null
-    //) =>
-    //    services.AddEventStoreDB(
-    //        config,
-    //        options
-    //    );
+    public const string ConnectionStringName = "EventStoreDbConnection";
 
+    /// <summary>
+    /// Registers the EventStoreDB client (singleton, disposed with the container) and the event store repository.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">The <c>ConnectionStrings:EventStoreDbConnection</c> setting is missing.</exception>
     public static IServiceCollection AddEventStoreInfrastructureServices(
         this IServiceCollection services,
-        IConfiguration config,
-        EventStoreDBOptions? options = null
-    )
+        IConfiguration config)
     {
-        var connectionString = config.GetConnectionString(DefaultConfigKey);
+        var connectionString = config.GetConnectionString(ConnectionStringName)
+            ?? throw new InvalidOperationException(
+                $"Connection string 'ConnectionStrings:{ConnectionStringName}' is not configured.");
+
         var settings = EventStoreClientSettings.Create(connectionString);
-        services
-            //.AddSingleton(EventTypeMapper.Instance)
-            .AddSingleton(new EventStoreClient(settings));
-        //.AddTransient<EventStoreDBSubscriptionToAll, EventStoreDBSubscriptionToAll>();
 
-        //if (options?.UseInternalCheckpointing != false)
-        //{
-        //    services
-        //        .AddTransient<ISubscriptionCheckpointRepository, EventStoreDBSubscriptionCheckpointRepository>();
-        //}
-
-        return services.AddScoped<IEventStoreRepository, EventStoreRepository>();
+        // Registered through a factory so the container owns (and disposes) the client.
+        return services
+            .AddSingleton(_ => new EventStoreClient(settings))
+            .AddScoped<IEventStoreRepository, EventStoreRepository>();
     }
-
 }
