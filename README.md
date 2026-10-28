@@ -7,12 +7,14 @@ Develop microservices in ASP.NET Core and C# with the following patterns and pri
 - Event Driven Architecture
 - REST Api
 
+## Getting started
+The KYC microservice lives in [`src/microservices/KYC`](src/microservices/KYC). Its README explains how to run it with one `docker compose up`, and the [docs](src/microservices/KYC/docs) cover architecture, API, configuration, testing (unit, integration, end-to-end, load) and the code review.
+
 ## Technologies
 - C#
-- ASP.NET Core 8
+- ASP.NET Core 10 (.NET 10)
 - MediatR
 - Hangfire
-- AutoMapper
 - EntityFrameworkCore
 - Apache Kafka
 - EventStoreDB

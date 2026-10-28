@@ -1,5 +1,4 @@
 ﻿using KYC.Domain.Aggregates.CustomerAggregate;
-using KYC.Write.MsSql.Infrastructure.EfConfigurations;
 using Mehedi.Application.SharedKernel.Persistence;
 using Mehedi.Core.SharedKernel;
 using Microsoft.EntityFrameworkCore;
@@ -27,9 +26,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-
-        // Apply entity configurations from the customer configuration
-        modelBuilder.ApplyConfiguration(new CustomerConfiguration());
 
         // Apply entity configurations from the current assembly
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

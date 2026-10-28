@@ -1,47 +1,52 @@
-﻿using AutoMapper;
 using KYC.Application.UseCases.Customers.DTOs;
 using KYC.Application.UseCases.Customers.Queries;
 using KYC.Domain.Aggregates.CustomerAggregate.Events;
 using MediatR;
-using Mehedi.Application.SharedKernel.Extensions;
 using Mehedi.Application.SharedKernel.Services;
 using Mehedi.Read.NoSql.Infrastructure.Abstractions;
 using Microsoft.Extensions.Logging;
 
 namespace KYC.Read.Mongo.Infrastructure.EventHandlers;
 
-public class CustomerEventHandler(
-    IMapper mapper,
+/// <summary>
+/// Projects <see cref="CustomerCreatedDomainEvent"/> into the MongoDB read model and invalidates the
+/// cached query results that the new customer makes stale.
+/// </summary>
+/// <remarks>
+/// A projection failure is logged and swallowed: the write has already been committed, so failing the
+/// request would be misleading. The read model can therefore lag behind the write model; see
+/// docs/architecture.md ("Consistency") for the trade-off and the outbox option.
+/// Personal data (names, date of birth) is deliberately NOT written to the logs.
+/// </remarks>
+public sealed class CustomerEventHandler(
     ISynchronizeDb synchronizeDb,
-    //ICacheService cacheService,
+    ICacheService cacheService,
     ILogger<CustomerEventHandler> logger) : INotificationHandler<CustomerCreatedDomainEvent>
 {
-    private readonly ILogger<CustomerEventHandler> _logger = logger;
-    private readonly ISynchronizeDb _synchronizeDb = synchronizeDb;
-    private readonly IMapper _mapper = mapper;
-    //private readonly ICacheService _cacheService = cacheService;
     public async Task Handle(CustomerCreatedDomainEvent notification, CancellationToken cancellationToken)
     {
-        LogEvent(notification);
+        logger.LogInformation(
+            "Projecting {EventName} for customer {CustomerId}", nameof(CustomerCreatedDomainEvent), notification.Id);
 
         try
         {
-            var customerQueryModel = _mapper.Map<CustomerQueryModel>(notification);
-            await _synchronizeDb.UpsertAsync(customerQueryModel, filter => filter.Id == customerQueryModel.Id);
-            await ClearCacheAsync(notification);
+            var queryModel = new CustomerQueryModel(
+                notification.Id,
+                notification.FirstName,
+                notification.LastName,
+                notification.Dob);
+
+            await synchronizeDb.UpsertAsync(queryModel, filter => filter.Id == queryModel.Id);
+
+            await cacheService.RemoveAsync(
+                GetAllCustomerQueryHandler.CacheKey,
+                GetCustomerByIdQueryHandler.CacheKeyFor(notification.Id));
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not OperationCanceledException)
         {
-            _logger.LogError($"Error when add event to read database! Details: {ex}");
+            logger.LogError(
+                ex, "Failed to project {EventName} for customer {CustomerId} into the read database",
+                nameof(CustomerCreatedDomainEvent), notification.Id);
         }
     }
-
-    private async Task ClearCacheAsync(CustomerBaseDomainEvent @event)
-    {
-        var cacheKeys = new[] { nameof(GetAllCustomerQuery), $"{nameof(GetCustomerByIdQuery)}_{@event.Id}" };
-        //await _cacheService.RemoveAsync(cacheKeys);
-    }
-
-    private void LogEvent<TEvent>(TEvent @event) where TEvent : CustomerBaseDomainEvent =>
-        _logger.LogInformation("----- Triggering the event {EventName}, model: {EventModel}", typeof(TEvent).Name, @event.ToJson());
 }

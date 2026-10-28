@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- These tests start real databases in Docker (Testcontainers). Docker must be running. -->
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+    <PackageReference Include="Microsoft.Extensions.Logging" />
+    <PackageReference Include="Testcontainers.MongoDb" />
+    <PackageReference Include="Testcontainers.MsSql" />
+    <PackageReference Include="Testcontainers.Redis" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Infrastructures\KYC.Read.Mongo.Infrastructure\KYC.Read.Mongo.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\Infrastructures\KYC.RedisCache.Infrastructure\KYC.RedisCache.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\Infrastructures\KYC.Write.MsSql.Infrastructure\KYC.Write.MsSql.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

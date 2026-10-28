@@ -1,0 +1,129 @@
+name: KYC CI
+
+on:
+  push:
+    branches: [master, "modernize/**"]
+    paths:
+      - "src/microservices/KYC/**"
+      - ".github/workflows/kyc-ci.yml"
+  pull_request:
+    paths:
+      - "src/microservices/KYC/**"
+      - ".github/workflows/kyc-ci.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: kyc-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  KYC_DIR: src/microservices/KYC
+
+jobs:
+  # Build, then run everything that needs no running stack:
+  #   unit tests, in-process API tests, and the Testcontainers integration tests (Docker is preinstalled on the runner).
+  build-and-test:
+    name: Build and test
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: ${{ env.KYC_DIR }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('src/microservices/KYC/Directory.Packages.props') }}
+          restore-keys: nuget-${{ runner.os }}-
+
+      - name: Restore
+        run: dotnet restore KYC.slnx
+
+      - name: Build
+        run: dotnet build KYC.slnx --no-restore --configuration Release
+
+      - name: Unit and API tests
+        run: >
+          dotnet test KYC.slnx --no-build --configuration Release
+          --filter "Category!=Integration&Category!=E2E"
+          --logger "trx;LogFileName=unit.trx"
+          --collect:"XPlat Code Coverage"
+          --results-directory TestResults/unit
+
+      - name: Integration tests (Testcontainers)
+        run: >
+          dotnet test tests/KYC.Infrastructure.IntegrationTests --no-build --configuration Release
+          --filter "Category=Integration"
+          --logger "trx;LogFileName=integration.trx"
+          --results-directory TestResults/integration
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: ${{ env.KYC_DIR }}/TestResults
+          if-no-files-found: warn
+
+  # Bring up the whole compose stack and test it from the outside, then run a short k6 smoke load test.
+  end-to-end:
+    name: End-to-end and load smoke
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    defaults:
+      run:
+        working-directory: ${{ env.KYC_DIR }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Create .env from the template
+        run: cp .env.example .env
+
+      - name: Start the stack
+        run: docker compose up --build --detach --wait --wait-timeout 600
+
+      - name: End-to-end tests
+        env:
+          KYC_E2E_BASE_URL: http://localhost:8080
+        run: >
+          dotnet test tests/KYC.EndToEndTests --configuration Release
+          --filter "Category=E2E"
+          --logger "trx;LogFileName=e2e.trx"
+          --results-directory TestResults/e2e
+
+      - name: Load test (k6 smoke)
+        run: docker compose --profile loadtest run --rm k6
+
+      - name: Collect container logs
+        if: failure()
+        run: docker compose logs --no-color > compose.log
+
+      - name: Upload results and logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-results
+          path: |
+            ${{ env.KYC_DIR }}/TestResults
+            ${{ env.KYC_DIR }}/compose.log
+          if-no-files-found: ignore
+
+      - name: Stop the stack
+        if: always()
+        run: docker compose down --volumes

@@ -1,16 +1,23 @@
-﻿using Mehedi.EventBus.Kafka;
 using Mehedi.EventBus;
+using Mehedi.EventBus.Kafka;
 
 namespace KYC.API;
 
 public static class DependencyInjection
 {
+    /// <summary>Registers the Kafka integration-event producer.</summary>
+    /// <exception cref="InvalidOperationException">
+    /// <c>ConnectionStrings:Kafka</c> or <c>eventsTopicName</c> is missing.
+    /// </exception>
     public static IServiceCollection AddEventBus(this IServiceCollection services, IConfiguration config)
     {
-        // Add Event Bus
-        var producerConfig = new KafkaProducerConfig(config.GetConnectionString("Kafka"), config["eventsTopicName"]);
-        return services.AddSingleton(producerConfig)
-                       // Add eventbus producers and consumers
-                       .AddSingleton<IEventProducer, EventProducer>(); ;
+        var bootstrapServers = config.GetConnectionString("Kafka")
+            ?? throw new InvalidOperationException("Connection string 'ConnectionStrings:Kafka' is not configured.");
+        var topic = config["eventsTopicName"]
+            ?? throw new InvalidOperationException("Setting 'eventsTopicName' is not configured.");
+
+        return services
+            .AddSingleton(new KafkaProducerConfig(bootstrapServers, topic))
+            .AddSingleton<IEventProducer, EventProducer>();
     }
 }

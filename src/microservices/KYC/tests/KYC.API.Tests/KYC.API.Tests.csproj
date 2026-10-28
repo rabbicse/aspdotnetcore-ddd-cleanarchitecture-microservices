@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Hosts the real API in-process (WebApplicationFactory) with its infrastructure replaced by fakes. No Docker needed. -->
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
+    <PackageReference Include="NSubstitute" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Presentation\KYC.API\KYC.API.csproj" />
+  </ItemGroup>
+
+</Project>

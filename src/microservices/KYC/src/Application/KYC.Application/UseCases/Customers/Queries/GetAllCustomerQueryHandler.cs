@@ -1,4 +1,4 @@
-﻿using KYC.Application.UseCases.Customers.DTOs;
+using KYC.Application.UseCases.Customers.DTOs;
 using KYC.Application.UseCases.Customers.Repositories;
 using MediatR;
 using Mehedi.Application.SharedKernel.Responses;
@@ -8,21 +8,19 @@ namespace KYC.Application.UseCases.Customers.Queries;
 
 public class GetAllCustomerQueryHandler(
     ICustomerQueryRepository repository,
-    ICacheService cacheService
-    )
+    ICacheService cacheService)
     : IRequestHandler<GetAllCustomerQuery, Result<IEnumerable<CustomerQueryModel>>>
 {
-    private const string CacheKey = nameof(GetAllCustomerQuery);
-    private readonly ICacheService _cacheService = cacheService;
-    private readonly ICustomerQueryRepository _readOnlyRepository = repository;
+    /// <summary>Cache key for the full customer list. Shared with the read-model projection that invalidates it.</summary>
+    public const string CacheKey = nameof(GetAllCustomerQuery);
 
     public async Task<Result<IEnumerable<CustomerQueryModel>>> Handle(
-          GetAllCustomerQuery request,
-          CancellationToken cancellationToken)
+        GetAllCustomerQuery request,
+        CancellationToken cancellationToken)
     {
-        // This method will either return the cached data associated with the CacheKey
-        // or create it by calling the GetAllAsync method.
-        return Result<IEnumerable<CustomerQueryModel>>.Success(
-            await _cacheService.GetOrCreateAsync(CacheKey, _readOnlyRepository.GetAllAsync));
+        // Cache-aside: return the cached list, or load it from the read database and cache it.
+        var customers = await cacheService.GetOrCreateAsync(CacheKey, repository.GetAllAsync);
+
+        return Result<IEnumerable<CustomerQueryModel>>.Success(customers);
     }
 }

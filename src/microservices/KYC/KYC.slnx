@@ -1,0 +1,33 @@
+<Solution>
+  <Folder Name="/src/Core/">
+    <Project Path="src/Core/KYC.Domain/KYC.Domain.csproj" />
+  </Folder>
+  <Folder Name="/src/Application/">
+    <Project Path="src/Application/KYC.Application/KYC.Application.csproj" />
+  </Folder>
+  <Folder Name="/src/Infrastructures/">
+    <Project Path="src/Infrastructures/KYC.EventStore.EventStoreDB.Infrastructure/KYC.EventStore.EventStoreDB.Infrastructure.csproj" />
+    <Project Path="src/Infrastructures/KYC.Read.Mongo.Infrastructure/KYC.Read.Mongo.Infrastructure.csproj" />
+    <Project Path="src/Infrastructures/KYC.RedisCache.Infrastructure/KYC.RedisCache.Infrastructure.csproj" />
+    <Project Path="src/Infrastructures/KYC.Write.MsSql.Infrastructure/KYC.Write.MsSql.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Presentation/">
+    <Project Path="src/Presentation/KYC.API/KYC.API.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/KYC.Domain.UnitTests/KYC.Domain.UnitTests.csproj" />
+    <Project Path="tests/KYC.Application.UnitTests/KYC.Application.UnitTests.csproj" />
+    <Project Path="tests/KYC.Infrastructure.UnitTests/KYC.Infrastructure.UnitTests.csproj" />
+    <Project Path="tests/KYC.Infrastructure.IntegrationTests/KYC.Infrastructure.IntegrationTests.csproj" />
+    <Project Path="tests/KYC.API.Tests/KYC.API.Tests.csproj" />
+    <Project Path="tests/KYC.EndToEndTests/KYC.EndToEndTests.csproj" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+    <File Path="global.json" />
+    <File Path="Dockerfile" />
+    <File Path="docker-compose.yml" />
+    <File Path=".env.example" />
+  </Folder>
+</Solution>
