@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- The domain model: no infrastructure, no frameworks except the DDD building blocks. -->
+  <ItemGroup>
+    <PackageReference Include="Mehedi.Core.SharedKernel" />
+  </ItemGroup>
+
+</Project>
