@@ -29,7 +29,7 @@
   <ItemGroup Label="Application / infrastructure libraries">
     <PackageVersion Include="EventStore.Client.Grpc.Streams" Version="23.2.1" />
     <PackageVersion Include="FluentValidation" Version="11.11.0" />
-    <PackageVersion Include="FluentValidation.DependencyInjectionExtensions" Version="11.11.0" />
+    <PackageVersion Include="FluentValidation.DependencyInjectionExtensions" Version="12.2.0" />
     <PackageVersion Include="Hangfire.AspNetCore" Version="1.8.12" />
     <PackageVersion Include="Hangfire.PostgreSql" Version="1.20.8" />
     <PackageVersion Include="MediatR" Version="12.5.0" />
