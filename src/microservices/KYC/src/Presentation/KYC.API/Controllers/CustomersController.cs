@@ -13,7 +13,6 @@ namespace KYC.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Produces(MediaTypeNames.Application.Json)]
 public class CustomersController(IMediator mediator) : ControllerBase
 {
     /// <summary>Registers a new customer and returns its id (HTTP 201).</summary>

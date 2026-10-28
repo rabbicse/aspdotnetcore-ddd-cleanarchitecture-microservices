@@ -27,6 +27,16 @@ public sealed class CustomersApiTests(KycApiFactory factory) : IClassFixture<Kyc
         }
     };
 
+    /// <summary>Asserts the status code and, on mismatch, puts the response body in the failure message.</summary>
+    private static async Task AssertStatusAsync(HttpStatusCode expected, HttpResponseMessage response)
+    {
+        if (response.StatusCode != expected)
+        {
+            var body = await response.Content.ReadAsStringAsync();
+            Assert.Fail($"Expected HTTP {(int)expected} {expected} but got {(int)response.StatusCode} {response.StatusCode}. Body: {body}");
+        }
+    }
+
     private static async Task<JsonElement> ReadJsonAsync(HttpResponseMessage response)
     {
         using var document = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
@@ -36,7 +46,7 @@ public sealed class CustomersApiTests(KycApiFactory factory) : IClassFixture<Kyc
     private async Task<Guid> RegisterAsync(string firstName = "Ada", string lastName = "Lovelace")
     {
         var response = await _client.PostAsJsonAsync("/api/customers", ValidCustomer(firstName, lastName));
-        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+        await AssertStatusAsync(HttpStatusCode.Created, response);
 
         var created = await response.Content.ReadFromJsonAsync<CreatedCustomerResponse>();
         Assert.NotNull(created);
@@ -49,7 +59,7 @@ public sealed class CustomersApiTests(KycApiFactory factory) : IClassFixture<Kyc
     {
         var response = await _client.PostAsJsonAsync("/api/customers", ValidCustomer());
 
-        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+        await AssertStatusAsync(HttpStatusCode.Created, response);
         var created = await response.Content.ReadFromJsonAsync<CreatedCustomerResponse>();
         Assert.NotNull(created);
         Assert.NotEqual(Guid.Empty, created.Id);
@@ -63,7 +73,7 @@ public sealed class CustomersApiTests(KycApiFactory factory) : IClassFixture<Kyc
 
         var response = await _client.GetAsync($"/api/customers/{id}");
 
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        await AssertStatusAsync(HttpStatusCode.OK, response);
         var customer = await ReadJsonAsync(response);
         Assert.Equal(id, customer.GetProperty("id").GetGuid());
         Assert.Equal("Grace", customer.GetProperty("firstName").GetString());
@@ -96,7 +106,7 @@ public sealed class CustomersApiTests(KycApiFactory factory) : IClassFixture<Kyc
 
         var response = await client.PostAsJsonAsync("/api/customers", ValidCustomer());
 
-        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+        await AssertStatusAsync(HttpStatusCode.Created, response);
     }
     #endregion
 
@@ -106,7 +116,7 @@ public sealed class CustomersApiTests(KycApiFactory factory) : IClassFixture<Kyc
     {
         var response = await _client.PostAsJsonAsync("/api/customers", ValidCustomer(firstName: ""));
 
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        await AssertStatusAsync(HttpStatusCode.BadRequest, response);
         Assert.Equal("application/problem+json", response.Content.Headers.ContentType?.MediaType);
         var problem = await ReadJsonAsync(response);
         Assert.Equal(400, problem.GetProperty("status").GetInt32());
@@ -121,7 +131,7 @@ public sealed class CustomersApiTests(KycApiFactory factory) : IClassFixture<Kyc
 
         var response = await _client.PostAsJsonAsync("/api/customers", request);
 
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        await AssertStatusAsync(HttpStatusCode.BadRequest, response);
         Assert.Equal("application/problem+json", response.Content.Headers.ContentType?.MediaType);
         var problem = await ReadJsonAsync(response);
         Assert.True(problem.GetProperty("errors").EnumerateObject().Any(error =>
@@ -133,7 +143,7 @@ public sealed class CustomersApiTests(KycApiFactory factory) : IClassFixture<Kyc
     {
         var response = await _client.PostAsJsonAsync("/api/customers", ValidCustomer(lastName: new string('x', 101)));
 
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        await AssertStatusAsync(HttpStatusCode.BadRequest, response);
     }
 
     [Fact]
@@ -143,7 +153,7 @@ public sealed class CustomersApiTests(KycApiFactory factory) : IClassFixture<Kyc
 
         var response = await _client.PostAsync("/api/customers", content);
 
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        await AssertStatusAsync(HttpStatusCode.BadRequest, response);
     }
 
     [Fact]
@@ -153,7 +163,7 @@ public sealed class CustomersApiTests(KycApiFactory factory) : IClassFixture<Kyc
 
         var response = await _client.PostAsync("/api/customers", content);
 
-        Assert.Equal(HttpStatusCode.UnsupportedMediaType, response.StatusCode);
+        await AssertStatusAsync(HttpStatusCode.UnsupportedMediaType, response);
     }
 
     [Fact]
@@ -174,7 +184,7 @@ public sealed class CustomersApiTests(KycApiFactory factory) : IClassFixture<Kyc
     {
         var response = await _client.GetAsync($"/api/customers/{Guid.NewGuid()}");
 
-        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        await AssertStatusAsync(HttpStatusCode.NotFound, response);
         Assert.Equal("application/problem+json", response.Content.Headers.ContentType?.MediaType);
         var problem = await ReadJsonAsync(response);
         Assert.Equal(404, problem.GetProperty("status").GetInt32());
@@ -185,7 +195,7 @@ public sealed class CustomersApiTests(KycApiFactory factory) : IClassFixture<Kyc
     {
         var response = await _client.GetAsync("/api/customers/not-a-guid");
 
-        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        await AssertStatusAsync(HttpStatusCode.NotFound, response);
     }
 
     [Fact]
@@ -196,7 +206,7 @@ public sealed class CustomersApiTests(KycApiFactory factory) : IClassFixture<Kyc
 
         var response = await _client.GetAsync("/api/customers");
 
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        await AssertStatusAsync(HttpStatusCode.OK, response);
         var customers = await ReadJsonAsync(response);
         var ids = customers.EnumerateArray().Select(customer => customer.GetProperty("id").GetGuid()).ToList();
         Assert.Contains(first, ids);
@@ -219,7 +229,7 @@ public sealed class CustomersApiTests(KycApiFactory factory) : IClassFixture<Kyc
     {
         var response = await _client.GetAsync("/health/live");
 
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        await AssertStatusAsync(HttpStatusCode.OK, response);
     }
 
     [Fact]
@@ -227,7 +237,7 @@ public sealed class CustomersApiTests(KycApiFactory factory) : IClassFixture<Kyc
     {
         var response = await _client.GetAsync("/openapi/v1.json");
 
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        await AssertStatusAsync(HttpStatusCode.OK, response);
         var document = await ReadJsonAsync(response);
         var paths = document.GetProperty("paths").EnumerateObject().Select(path => path.Name).ToList();
         Assert.Contains(paths, path => path.Equals("/api/Customers", StringComparison.OrdinalIgnoreCase));

@@ -10,7 +10,9 @@ namespace KYC.API.Http;
 /// FluentValidation failures become HTTP 400 with per-field errors, everything else becomes HTTP 500
 /// without leaking exception details to the caller.
 /// </summary>
-internal sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IExceptionHandler
+internal sealed class GlobalExceptionHandler(
+    ILogger<GlobalExceptionHandler> logger,
+    IHostEnvironment environment) : IExceptionHandler
 {
     public async ValueTask<bool> TryHandleAsync(
         HttpContext httpContext,
@@ -53,6 +55,12 @@ internal sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> log
                 Status = StatusCodes.Status500InternalServerError,
                 Title = "An unexpected error occurred."
             };
+
+            // Developers and the in-process tests need the cause; production callers must never see it.
+            if (environment.IsDevelopment() || environment.IsEnvironment("Testing"))
+            {
+                problem.Detail = exception.ToString();
+            }
         }
 
         problem.Instance = httpContext.Request.Path;
