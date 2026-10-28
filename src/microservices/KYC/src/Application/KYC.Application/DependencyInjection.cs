@@ -1,6 +1,5 @@
 using FluentValidation;
 using KYC.Application.Behaviors;
-using Mehedi.Application.SharedKernel.Behaviors;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
