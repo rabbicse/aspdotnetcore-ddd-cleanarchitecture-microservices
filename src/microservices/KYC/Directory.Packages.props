@@ -43,7 +43,6 @@
     <PackageVersion Include="Mehedi.EventBus.Abstractions" Version="1.0.1" />
     <PackageVersion Include="Mehedi.EventBus.Kafka" Version="1.0.12" />
     <PackageVersion Include="Mehedi.Hangfire.Extensions" Version="1.0.2" />
-    <PackageVersion Include="Mehedi.Read.NoSql.Infrastructure.Abstractions" Version="1.0.4" />
     <PackageVersion Include="Mehedi.Write.RDBMS.Infrastructure.Abstractions" Version="1.0.6" />
   </ItemGroup>
 
