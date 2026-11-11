@@ -2,7 +2,7 @@
 # Build context: this folder (src/microservices/KYC).  docker build -t kyc-api .
 
 # ---- build ----------------------------------------------------------------------------------
-FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:11.0 AS build
 WORKDIR /src
 
 # Restore first so the layer is cached until a project file or a package version changes.
