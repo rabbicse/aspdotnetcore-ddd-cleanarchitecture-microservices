@@ -4,7 +4,9 @@
     <PackageReference Include="EventStore.Client.Grpc.Streams" />
     <PackageReference Include="Mehedi.Application.SharedKernel" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" VersionOverride="11.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Logging" VersionOverride="11.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
   </ItemGroup>
 
