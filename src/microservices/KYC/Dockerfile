@@ -22,7 +22,7 @@ RUN dotnet publish src/Presentation/KYC.API/KYC.API.csproj \
 
 # ---- runtime --------------------------------------------------------------------------------
 # Debian-based image: the Kafka client (librdkafka) needs glibc, so do not switch to Alpine.
-FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
+FROM mcr.microsoft.com/dotnet/aspnet:11.0 AS final
 WORKDIR /app
 
 ENV ASPNETCORE_HTTP_PORTS=8080 \
