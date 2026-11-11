@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <PackageReference Include="Mehedi.Core.SharedKernel" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
   </ItemGroup>
 
 </Project>
